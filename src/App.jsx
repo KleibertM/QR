@@ -7,6 +7,7 @@ import QRForm from "./components/QRForm.jsx";
 import QRPreview from "./components/QRPreview.jsx";
 import ToastContainer from "./components/ToastContainer.jsx";
 import { addHistoryItem, MAX_HISTORY, readHistory, STORAGE_KEY, writeHistory } from "./utils/history.js";
+import { compressImage, MAX_SAVED_IMAGES, readImageLibrary, removeImageFromLibrary, saveImageToLibrary } from "./utils/imageLibrary.js";
 import { COLOR_PALETTES, createQRContent, INITIAL_FORM } from "./utils/qr.js";
 
 export default function App() {
@@ -14,6 +15,8 @@ export default function App() {
   const [paletteIndex, setPaletteIndex] = useState(0);
   const [form, setForm] = useState(INITIAL_FORM);
   const [history, setHistory] = useState(readHistory);
+  const [imageLibrary, setImageLibrary] = useState(readImageLibrary);
+  const [selectedImage, setSelectedImage] = useState(null);
   const [qr, setQr] = useState(() => ({
     ...createQRContent("link", INITIAL_FORM),
     id: "",
@@ -64,6 +67,36 @@ export default function App() {
   const handleFormChange = (event) => {
     const { name, value } = event.target;
     setForm((previous) => ({ ...previous, [name]: value }));
+  };
+
+  const handleImageUpload = async (file) => {
+    const compressedImage = await compressImage(file);
+    try {
+      const { images: nextImages, removedImage } = saveImageToLibrary(compressedImage);
+      setImageLibrary(nextImages);
+      setSelectedImage(nextImages[0]);
+      notify(
+        removedImage
+          ? `Imagen guardada. Se eliminó "${removedImage.name}", la más antigua, para mantener el límite de ${MAX_SAVED_IMAGES}.`
+          : "Imagen guardada en este navegador.",
+        "success",
+      );
+    } catch (error) {
+      console.error("No se pudo guardar la imagen en el almacenamiento local.", error);
+      throw new Error("No hay espacio disponible en el almacenamiento del navegador. Elimina imágenes guardadas e inténtalo de nuevo.");
+    }
+  };
+
+  const handleImageDelete = (id) => {
+    try {
+      const nextImages = removeImageFromLibrary(id);
+      setImageLibrary(nextImages);
+      setSelectedImage((current) => current?.id === id ? null : current);
+      notify("Imagen eliminada de este dispositivo.", "info");
+    } catch (error) {
+      console.error("No se pudo eliminar la imagen del almacenamiento local.", error);
+      notify("No se pudo eliminar la imagen. Revisa el almacenamiento del navegador.", "warning");
+    }
   };
 
   const handleRestore = (item) => {
@@ -187,6 +220,11 @@ export default function App() {
               setPaletteIndex={setPaletteIndex}
               onGenerate={() => generate(true)}
               onChange={handleFormChange}
+              imageLibrary={imageLibrary}
+              selectedImage={selectedImage}
+              onImageUpload={handleImageUpload}
+              onImageSelect={setSelectedImage}
+              onImageDelete={handleImageDelete}
             />
             <AdSlot label="Publicidad" size="min-h-[250px] max-w-[320px]" />
           </div>
