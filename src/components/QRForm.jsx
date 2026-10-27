@@ -1,6 +1,7 @@
 import { COLOR_PALETTES, QR_TYPES } from "../utils/qr.js";
+import ImageDropzone from "./ImageDropzone.jsx";
 
-function renderFields(type, form, onChange) {
+function renderFields(type, form, onChange, imageProps) {
   const fields = {
     link: (
       <>
@@ -11,6 +12,10 @@ function renderFields(type, form, onChange) {
     ),
     image: (
       <>
+        <ImageDropzone {...imageProps} />
+        <p className="field-hint">
+          La vista previa solo está disponible en este dispositivo. Para que el QR abra la imagen a otras personas, primero súbela a un servicio público (Drive, Dropbox o tu sitio web) y pega su enlace aquí.
+        </p>
         <label className="field-label" htmlFor="image-url">Enlace directo a tu imagen o afiche digital</label>
         <input id="image-url" type="url" name="image" value={form.image} onChange={onChange} className="field-input" placeholder="https://drive.google.com/..." />
         <p className="field-hint">Sube tu afiche a Drive, Dropbox, OneDrive o Imgur y permite que cualquiera con el enlace lo vea.</p>
@@ -68,7 +73,7 @@ const typeDescriptions = {
   contact: "Guarda teléfono y correo",
 };
 
-export default function QRForm({ type, setType, paletteIndex, setPaletteIndex, onGenerate, onChange, form }) {
+export default function QRForm({ type, setType, paletteIndex, setPaletteIndex, onGenerate, onChange, form, imageLibrary, selectedImage, onImageUpload, onImageSelect, onImageDelete }) {
   return (
     <form
       className="space-y-6 rounded-3xl border border-slate-100 bg-white p-5 shadow-sm sm:p-7"
@@ -105,7 +110,7 @@ export default function QRForm({ type, setType, paletteIndex, setPaletteIndex, o
         <label className="field-label" htmlFor="qr-label-input">Nombre de referencia para tu código <span className="font-normal text-slate-400">(Visible en tu historial)</span></label>
         <input id="qr-label-input" name="title" value={form.title} onChange={onChange} className="field-input mb-4" placeholder="Ej: Transmisión Culto Dominical" />
         <div className="space-y-3 rounded-2xl border border-slate-200 bg-slate-50/70 p-4">
-          {renderFields(type, form, onChange)}
+          {renderFields(type, form, onChange, { imageLibrary, selectedImage, onImageUpload, onImageSelect, onImageDelete })}
         </div>
       </section>
 
