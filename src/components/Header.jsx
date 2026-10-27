@@ -8,7 +8,7 @@ export default function Header() {
           </div>
           <div>
             <h1 className="font-title text-xl font-bold leading-tight text-slate-800">
-              QR &amp; KM - Axion
+              QR Axion
             </h1>
             <p className="text-xs font-medium text-slate-500">
               Códigos QR eternos, gratuitos y fáciles de usar
