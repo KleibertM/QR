@@ -1,5 +1,6 @@
 node_modules/
 dist/
+src/tailwind.generated.css
 .env
 .env.*
 !.env.example

@@ -16,6 +16,6 @@ npm run build
 npm run preview
 ```
 
-Tailwind CSS, Font Awesome, las fuentes y EasyQRCodeJS se cargan desde CDN en `index.html`.
+Tailwind CSS se compila localmente con Tailwind CLI. Font Awesome, las fuentes y EasyQRCodeJS se cargan desde CDN en `index.html`.
 
-Las imágenes seleccionadas se optimizan en el navegador y se guardan en `localStorage`, con un máximo de 10 y reemplazo automático de la más antigua. Esta biblioteca es local al dispositivo; para incluir una imagen en un QR que otros dispositivos puedan abrir, hace falta una URL pública.
+Las imágenes se optimizan en el navegador y se guardan en IndexedDB, el almacenamiento nativo del navegador pensado para archivos y datos binarios. Se conservan como máximo 10, con reemplazo automático de la más antigua. Esta biblioteca es local al dispositivo; para incluir una imagen en un QR que otros dispositivos puedan abrir, hace falta una URL pública.

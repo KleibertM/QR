@@ -110,7 +110,13 @@ export default function QRForm({ type, setType, paletteIndex, setPaletteIndex, o
         <label className="field-label" htmlFor="qr-label-input">Nombre de referencia para tu código <span className="font-normal text-slate-400">(Visible en tu historial)</span></label>
         <input id="qr-label-input" name="title" value={form.title} onChange={onChange} className="field-input mb-4" placeholder="Ej: Transmisión Culto Dominical" />
         <div className="space-y-3 rounded-2xl border border-slate-200 bg-slate-50/70 p-4">
-          {renderFields(type, form, onChange, { imageLibrary, selectedImage, onImageUpload, onImageSelect, onImageDelete })}
+          {renderFields(type, form, onChange, {
+            images: imageLibrary,
+            selectedImage,
+            onUpload: onImageUpload,
+            onSelect: onImageSelect,
+            onDelete: onImageDelete,
+          })}
         </div>
       </section>
 

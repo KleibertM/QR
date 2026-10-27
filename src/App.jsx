@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import AdSlot from "./components/AdSlot.jsx";
 import Footer from "./components/Footer.jsx";
 import Header from "./components/Header.jsx";
@@ -7,7 +7,7 @@ import QRForm from "./components/QRForm.jsx";
 import QRPreview from "./components/QRPreview.jsx";
 import ToastContainer from "./components/ToastContainer.jsx";
 import { addHistoryItem, MAX_HISTORY, readHistory, STORAGE_KEY, writeHistory } from "./utils/history.js";
-import { compressImage, MAX_SAVED_IMAGES, readImageLibrary, removeImageFromLibrary, saveImageToLibrary } from "./utils/imageLibrary.js";
+import { compressImage, deleteSavedImage, listSavedImages, MAX_SAVED_IMAGES, saveImage } from "./utils/imageStorage.js";
 import { COLOR_PALETTES, createQRContent, INITIAL_FORM } from "./utils/qr.js";
 
 export default function App() {
@@ -15,7 +15,7 @@ export default function App() {
   const [paletteIndex, setPaletteIndex] = useState(0);
   const [form, setForm] = useState(INITIAL_FORM);
   const [history, setHistory] = useState(readHistory);
-  const [imageLibrary, setImageLibrary] = useState(readImageLibrary);
+  const [imageLibrary, setImageLibrary] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
   const [qr, setQr] = useState(() => ({
     ...createQRContent("link", INITIAL_FORM),
@@ -34,6 +34,22 @@ export default function App() {
       setToasts((items) => items.filter((item) => item.id !== id));
     }, 3500);
   }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+    listSavedImages()
+      .then((images) => {
+        if (isMounted) setImageLibrary(images);
+      })
+      .catch((error) => {
+        console.error("No se pudo cargar la biblioteca local de imágenes.", error);
+        if (isMounted) notify("No se pudo cargar la biblioteca de imágenes de este dispositivo.", "warning");
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [notify]);
 
   const generate = useCallback((shouldSave = true) => {
     const item = {
@@ -72,7 +88,7 @@ export default function App() {
   const handleImageUpload = async (file) => {
     const compressedImage = await compressImage(file);
     try {
-      const { images: nextImages, removedImage } = saveImageToLibrary(compressedImage);
+      const { images: nextImages, removedImage } = await saveImage(compressedImage);
       setImageLibrary(nextImages);
       setSelectedImage(nextImages[0]);
       notify(
@@ -83,13 +99,13 @@ export default function App() {
       );
     } catch (error) {
       console.error("No se pudo guardar la imagen en el almacenamiento local.", error);
-      throw new Error("No hay espacio disponible en el almacenamiento del navegador. Elimina imágenes guardadas e inténtalo de nuevo.");
+      throw new Error(error.message || "No se pudo guardar la imagen en este navegador.");
     }
   };
 
-  const handleImageDelete = (id) => {
+  const handleImageDelete = async (id) => {
     try {
-      const nextImages = removeImageFromLibrary(id);
+      const nextImages = await deleteSavedImage(id);
       setImageLibrary(nextImages);
       setSelectedImage((current) => current?.id === id ? null : current);
       notify("Imagen eliminada de este dispositivo.", "info");

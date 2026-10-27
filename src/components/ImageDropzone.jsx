@@ -1,12 +1,22 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-export default function ImageDropzone({ images, selectedImage, onUpload, onSelect, onDelete }) {
+const EMPTY_IMAGES = [];
+
+export default function ImageDropzone({ images = EMPTY_IMAGES, selectedImage, onUpload, onSelect, onDelete }) {
   const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState("");
+  const previewUrls = useMemo(
+    () => Object.fromEntries(images.map((image) => [image.id, URL.createObjectURL(image.blob)])),
+    [images],
+  );
+
+  useEffect(() => {
+    return () => Object.values(previewUrls).forEach((url) => URL.revokeObjectURL(url));
+  }, [previewUrls]);
 
   const selectImage = async (image) => {
     if (!image) return;
-    if (!image.type.startsWith("image/")) {
+    if (!image.type?.startsWith("image/")) {
       setError("Selecciona un archivo de imagen válido.");
       return;
     }
@@ -63,7 +73,7 @@ export default function ImageDropzone({ images, selectedImage, onUpload, onSelec
 
       {selectedImage && (
         <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-2.5">
-          <img src={selectedImage.dataUrl} alt={`Vista previa de ${selectedImage.name}`} className="h-16 w-16 rounded-lg object-cover" />
+          <img src={previewUrls[selectedImage.id] ?? ""} alt={`Vista previa de ${selectedImage.name}`} className="h-16 w-16 rounded-lg object-cover" />
           <div className="min-w-0 flex-1">
             <p className="truncate text-xs font-bold text-slate-700">{selectedImage.name}</p>
             <p className="text-[11px] text-slate-500">Guardada en este navegador · {(selectedImage.size / 1024).toFixed(0)} KB</p>
@@ -88,7 +98,7 @@ export default function ImageDropzone({ images, selectedImage, onUpload, onSelec
             {images.map((image) => (
               <div key={image.id} className="overflow-hidden rounded-lg border border-slate-200">
                 <button type="button" onClick={() => onSelect(image)} className="block w-full text-left hover:bg-indigo-50">
-                  <img src={image.dataUrl} alt="" className="h-20 w-full object-cover" />
+                  <img src={previewUrls[image.id] ?? ""} alt="" className="h-20 w-full object-cover" />
                   <span className="block truncate px-2 py-1 text-[10px] font-semibold text-slate-600">{image.name}</span>
                 </button>
                 <div className="flex items-center justify-between border-t border-slate-100 px-2 py-1">
