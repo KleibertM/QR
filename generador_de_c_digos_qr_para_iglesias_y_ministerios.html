@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generador de Códigos QR - Comunidad e Iglesia</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- EasyQRCodeJS Library (Crea QR en alta definición, estáticos y sin caducidad) -->
+  <script src="https://cdn.jsdelivr.net/npm/easyqrcodejs@4.6.1/dist/easy.qrcode.min.js"></script>
+  <!-- Google Fonts: Poppins / Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            title: ['Quicksand', 'sans-serif'],
+            sans: ['Nunito', 'sans-serif'],
+          },
+          colors: {
+            pastel: {
+              cream: '#FDFBF7',
+              mint: '#E2F4EE',
+              mintDark: '#2D7F67',
+              sky: '#E3F2FD',
+              skyDark: '#1E6F9F',
+              lavender: '#EDE7F6',
+              lavenderDark: '#5E35B1',
+              peach: '#FCEFE9',
+              peachDark: '#B8532F',
+              rose: '#FCE7F3',
+              card: '#FFFFFF',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Estilos personalizados y utilidades de impresión */
+    body {
+      background-color: #FAF8F5;
+      color: #334155;
+      font-family: 'Nunito', sans-serif;
+    }
+    .font-title {
+      font-family: 'Quicksand', sans-serif;
+    }
+    /* Estilo de los anuncios preparados para AdSense */
+    .ad-slot-container {
+      background: repeating-linear-gradient(
+        -45deg,
+        #f8fafc,
+        #f8fafc 10px,
+        #f1f5f9 10px,
+        #f1f5f9 20px
+      );
+    }
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #print-area, #print-area * {
+        visibility: visible;
+      }
+      #print-area {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-teal-100 selection:text-teal-900">
+
+  <!-- ========================================== -->
+  <!-- BARRA DE NAVEGACIÓN Y ENCABEZADO SUPERIOR  -->
+  <!-- ========================================== -->
+  <header class="bg-white/90 backdrop-blur border-b border-amber-100/60 sticky top-0 z-30 shadow-xs">
+    <div class="max-w-6xl mx-auto px-4 py-3 sm:px-6 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-sky-400 to-indigo-300 flex items-center justify-center text-white shadow-sm shadow-sky-200">
+          <i class="fa-solid fa-church text-xl"></i>
+        </div>
+        <div>
+          <h1 class="font-title text-xl font-bold text-slate-800 leading-tight">QR Parroquial & Comunidad</h1>
+          <p class="text-xs text-slate-500 font-medium">Códigos QR eternos, gratuitos y fáciles de usar</p>
+        </div>
+      </div>
+      <div class="hidden sm:flex items-center gap-2 text-xs font-semibold text-emerald-700 bg-emerald-50 px-3.5 py-1.5 rounded-full border border-emerald-200/60">
+        <i class="fa-solid fa-shield-halved"></i>
+        <span>100% Estáticos • No caducan nunca</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-6 sm:px-6 flex-1 w-full space-y-6">
+
+    <!-- ========================================================= -->
+    <!-- ESPACIO PUBLICITARIO 1: TOP LEADERBOARD (728x90 adaptable) -->
+    <!-- ========================================================= -->
+    <!-- 
+      INSTRUCCIÓN PARA MONETIZAR:
+      Cuando Google AdSense te apruebe, reemplaza el contenido interno de este div 
+      por tu código de bloque de anuncios responsivo <ins class="adsbygoogle" ...></ins>
+    -->
+    <section aria-label="Espacio Publicitario Superior" class="w-full flex flex-col items-center">
+      <span class="text-[10px] tracking-wider uppercase font-bold text-slate-400 mb-1">Publicidad de apoyo</span>
+      <div class="ad-slot-container w-full max-w-4xl min-h-[90px] rounded-2xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center p-3 text-center transition-all hover:border-slate-300">
+        <div class="flex items-center gap-2 text-slate-400 text-xs font-semibold">
+          <i class="fa-regular fa-rectangle-ad text-base text-indigo-400"></i>
+          <span>Espacio reservado para Anuncio (728x90 / Banner Adaptable)</span>
+        </div>
+        <p class="text-[11px] text-slate-400 mt-0.5">Los ingresos por anuncios permiten mantener este generador 100% gratuito para la comunidad.</p>
+        <!-- Reemplazar aquí con: <script async src="https://pagead2.googlesyndication.com/..."></script> -->
+      </div>
+    </section>
+
+    <!-- INTRODUCCIÓN AMIGABLE -->
+    <div class="bg-gradient-to-r from-sky-50 via-indigo-50/50 to-emerald-50 rounded-3xl p-5 sm:p-6 border border-sky-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div class="space-y-1">
+        <h2 class="font-title text-xl font-bold text-slate-800 flex items-center gap-2">
+          <span>Bienvenido, hermano/a</span>
+          <span class="text-xl">🕊️</span>
+        </h2>
+        <p class="text-sm text-slate-600 max-w-2xl leading-relaxed">
+          Crea folletos, comparte cultos en vivo, avisos o facilita el acceso al Wi-Fi del templo en 3 simples pasos. Los códigos generados funcionan para siempre y no necesitan registro ni pago.
+        </p>
+      </div>
+      <a href="#historial-section" class="inline-flex items-center gap-2 text-xs font-bold bg-white text-slate-700 px-4 py-2.5 rounded-xl shadow-xs border border-slate-200/80 hover:bg-slate-50 transition-colors whitespace-nowrap">
+        <i class="fa-solid fa-clock-rotate-left text-indigo-500"></i>
+        <span>Ver mis últimos 10 QR</span>
+      </a>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- ÁREA PRINCIPAL: FORMULARIO Y RESULTADO     -->
+    <!-- ========================================== -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+      <!-- COLUMNA IZQUIERDA: CONFIGURADOR DEL QR (7 Columnas) -->
+      <section class="lg:col-span-7 bg-white rounded-3xl p-5 sm:p-7 shadow-xs border border-slate-100 space-y-6">
+
+        <!-- PASO 1: SELECCIONAR TIPO DE QR -->
+        <div>
+          <div class="flex items-center gap-2 mb-3">
+            <span class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 font-bold text-xs flex items-center justify-center">1</span>
+            <label class="font-title font-bold text-base text-slate-800">¿Qué deseas compartir con este código?</label>
+          </div>
+
+          <!-- Pestañas descriptivas -->
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5" id="type-selector-tabs">
+            
+            <!-- Botón 1: Enlace Web -->
+            <button type="button" onclick="setQRType('link')" data-type="link" class="type-tab-btn active p-3 rounded-2xl border text-left transition-all flex flex-col justify-between bg-indigo-50/80 border-indigo-300 text-indigo-900 shadow-xs">
+              <div class="flex items-center justify-between mb-1.5">
+                <i class="fa-solid fa-globe text-indigo-600 text-lg"></i>
+                <span class="w-2 h-2 rounded-full bg-indigo-500 indicator"></span>
+              </div>
+              <div>
+                <p class="font-bold text-xs sm:text-sm leading-tight">Enlace Web</p>
+                <p class="text-[11px] text-slate-500 mt-0.5">YouTube, Facebook, Web</p>
+              </div>
+            </button>
+
+            <!-- Botón 2: Enlace a Imagen / Folleto -->
+            <button type="button" onclick="setQRType('image')" data-type="image" class="type-tab-btn p-3 rounded-2xl border text-left transition-all flex flex-col justify-between bg-white border-slate-200 text-slate-700 hover:border-slate-300">
+              <div class="flex items-center justify-between mb-1.5">
+                <i class="fa-regular fa-image text-emerald-600 text-lg"></i>
+                <span class="w-2 h-2 rounded-full bg-transparent indicator"></span>
+              </div>
+              <div>
+                <p class="font-bold text-xs sm:text-sm leading-tight">Folleto o Imagen</p>
+                <p class="text-[11px] text-slate-500 mt-0.5">Foto en Drive, Dropbox...</p>
+              </div>
+            </button>
+
+            <!-- Botón 3: Wi-Fi de la Iglesia (EN AUGE) -->
+            <button type="button" onclick="setQRType('wifi')" data-type="wifi" class="type-tab-btn p-3 rounded-2xl border text-left transition-all flex flex-col justify-between bg-white border-slate-200 text-slate-700 hover:border-slate-300">
+              <div class="flex items-center justify-between mb-1.5">
+                <i class="fa-solid fa-wifi text-sky-600 text-lg"></i>
+                <span class="text-[9px] font-extrabold uppercase px-1.5 py-0.5 bg-amber-100 text-amber-800 rounded-md">Útil</span>
+              </div>
+              <div>
+                <p class="font-bold text-xs sm:text-sm leading-tight">Clave Wi-Fi</p>
+                <p class="text-[11px] text-slate-500 mt-0.5">Conexión con 1 escaneo</p>
+              </div>
+            </button>
+
+            <!-- Botón 4: Versículo o Texto -->
+            <button type="button" onclick="setQRType('text')" data-type="text" class="type-tab-btn p-3 rounded-2xl border text-left transition-all flex flex-col justify-between bg-white border-slate-200 text-slate-700 hover:border-slate-300">
+              <div class="flex items-center justify-between mb-1.5">
+                <i class="fa-solid fa-book-bible text-amber-600 text-lg"></i>
+                <span class="w-2 h-2 rounded-full bg-transparent indicator"></span>
+              </div>
+              <div>
+                <p class="font-bold text-xs sm:text-sm leading-tight">Versículo / Texto</p>
+                <p class="text-[11px] text-slate-500 mt-0.5">Mensaje o bendición</p>
+              </div>
+            </button>
+
+            <!-- Botón 5: Contacto Pastoral / vCard -->
+            <button type="button" onclick="setQRType('contact')" data-type="contact" class="type-tab-btn p-3 rounded-2xl border text-left transition-all flex flex-col justify-between bg-white border-slate-200 text-slate-700 hover:border-slate-300 col-span-2 sm:col-span-2">
+              <div class="flex items-center justify-between mb-1.5">
+                <i class="fa-regular fa-address-card text-purple-600 text-lg"></i>
+                <span class="w-2 h-2 rounded-full bg-transparent indicator"></span>
+              </div>
+              <div>
+                <p class="font-bold text-xs sm:text-sm leading-tight">Contacto Pastoral / Ministerio</p>
+                <p class="text-[11px] text-slate-500 mt-0.5">Guarda teléfono y correo directamente al celular</p>
+              </div>
+            </button>
+
+          </div>
+        </div>
+
+        <!-- PASO 2: FORMULARIO DINÁMICO SEGÚN TIPO -->
+        <div>
+          <div class="flex items-center gap-2 mb-3">
+            <span class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 font-bold text-xs flex items-center justify-center">2</span>
+            <label class="font-title font-bold text-base text-slate-800">Completa la información</label>
+          </div>
+
+          <!-- Título / Etiqueta del código (para recordarlo) -->
+          <div class="mb-4">
+            <label for="qr-label-input" class="block text-xs font-bold text-slate-700 mb-1">
+              Nombre de referencia para tu código <span class="text-slate-400 font-normal">(Visible en tu historial)</span>
+            </label>
+            <input type="text" id="qr-label-input" placeholder="Ej: Transmisión Culto Dominical / Folleto Campamento" class="w-full text-sm px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 transition-all bg-slate-50/50">
+          </div>
+
+          <!-- PANEL A: ENLACE WEB -->
+          <div id="panel-link" class="type-panel space-y-3">
+            <div class="bg-indigo-50/50 border border-indigo-100 p-3.5 rounded-2xl">
+              <label for="link-url" class="block text-xs font-bold text-indigo-900 mb-1">
+                Dirección web o enlace (URL)
+              </label>
+              <div class="relative">
+                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 text-sm">
+                  <i class="fa-solid fa-link"></i>
+                </span>
+                <input type="url" id="link-url" value="https://www.youtube.com/@iglesiacomunidad" placeholder="https://www.tuiglesia.com o https://youtu.be/..." class="w-full text-sm pl-10 pr-4 py-2.5 rounded-xl border border-indigo-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-300">
+              </div>
+              <p class="text-[11px] text-slate-500 mt-2">
+                💡 <span class="font-semibold">Consejo:</span> Puedes colocar el link de tus transmisiones en vivo de Facebook o YouTube, donaciones, peticiones de oración o tu página oficial.
+              </p>
+            </div>
+          </div>
+
+          <!-- PANEL B: ENLACE A IMAGEN O FOLLETO DIGITAL -->
+          <div id="panel-image" class="type-panel hidden space-y-3">
+            <div class="bg-emerald-50/50 border border-emerald-100 p-3.5 rounded-2xl">
+              <label for="image-url" class="block text-xs font-bold text-emerald-900 mb-1">
+                Enlace directo a tu imagen o afiche digital
+              </label>
+              <div class="relative">
+                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 text-sm">
+                  <i class="fa-regular fa-image"></i>
+                </span>
+                <input type="url" id="image-url" placeholder="https://drive.google.com/... o https://i.imgur.com/afiche.jpg" class="w-full text-sm pl-10 pr-4 py-2.5 rounded-xl border border-emerald-200 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-300">
+              </div>
+              <div class="mt-2 text-[11px] text-slate-600 space-y-1">
+                <p class="font-bold text-emerald-800">¿Cómo compartir un folleto o imagen?</p>
+                <ol class="list-decimal list-inside space-y-0.5 text-slate-500">
+                  <li>Sube tu afiche o boletín a <strong class="text-slate-700">Google Drive, Dropbox, OneDrive o Imgur</strong>.</li>
+                  <li>Configura el archivo como <em class="text-slate-700">"Cualquier persona con el enlace puede ver"</em>.</li>
+                  <li>Pega el enlace aquí arriba. Al escanear el QR, verán la imagen en pantalla completa.</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+
+          <!-- PANEL C: WI-FI DEL TEMPLO / COMUNIDAD -->
+          <div id="panel-wifi" class="type-panel hidden space-y-3">
+            <div class="bg-sky-50/60 border border-sky-100 p-3.5 rounded-2xl space-y-3">
+              <div class="flex items-center justify-between">
+                <p class="text-xs font-bold text-sky-900">Configuración de la Red Wi-Fi</p>
+                <span class="text-[11px] text-sky-700 bg-sky-100 px-2 py-0.5 rounded-md font-semibold">Muy recomendado</span>
+              </div>
+              <div>
+                <label for="wifi-ssid" class="block text-xs font-bold text-slate-700 mb-1">Nombre de la red Wi-Fi (SSID)</label>
+                <input type="text" id="wifi-ssid" placeholder="Ej: Templo_Comunidad_Invitados" class="w-full text-sm px-4 py-2 rounded-xl border border-sky-200 bg-white focus:ring-2 focus:ring-sky-300 outline-none">
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label for="wifi-pass" class="block text-xs font-bold text-slate-700 mb-1">Contraseña de red</label>
+                  <input type="text" id="wifi-pass" placeholder="Clave del Wi-Fi" class="w-full text-sm px-4 py-2 rounded-xl border border-sky-200 bg-white focus:ring-2 focus:ring-sky-300 outline-none">
+                </div>
+                <div>
+                  <label for="wifi-type" class="block text-xs font-bold text-slate-700 mb-1">Seguridad</label>
+                  <select id="wifi-type" class="w-full text-sm px-3 py-2 rounded-xl border border-sky-200 bg-white focus:ring-2 focus:ring-sky-300 outline-none">
+                    <option value="WPA">WPA / WPA2 (Más común)</option>
+                    <option value="WEP">WEP</option>
+                    <option value="nopass">Sin contraseña (Abierta)</option>
+                  </select>
+                </div>
+              </div>
+              <p class="text-[11px] text-slate-500">
+                ✨ Quienes escaneen este QR se conectarán inmediatamente sin tener que escribir claves complejas.
+              </p>
+            </div>
+          </div>
+
+          <!-- PANEL D: VERSÍCULO BÍBLICO / TEXTO LIBRE -->
+          <div id="panel-text" class="type-panel hidden space-y-3">
+            <div class="bg-amber-50/60 border border-amber-100 p-3.5 rounded-2xl">
+              <label for="text-content" class="block text-xs font-bold text-amber-900 mb-1">
+                Versículo Bíblico, Mensaje de Ánimo o Aviso
+              </label>
+              <textarea id="text-content" rows="3" placeholder="Ej: «El Señor es mi pastor, nada me faltará» - Salmos 23:1&#10;¡Bienvenidos a nuestra casa de oración!" class="w-full text-sm p-3 rounded-xl border border-amber-200 bg-white focus:ring-2 focus:ring-amber-300 outline-none resize-none"></textarea>
+              <p class="text-[11px] text-slate-500 mt-1">
+                Al escanear, el teléfono mostrará la cita bíblica o el mensaje directamente en pantalla, sin necesidad de conexión a internet.
+              </p>
+            </div>
+          </div>
+
+          <!-- PANEL E: CONTACTO PASTORAL / VCARD -->
+          <div id="panel-contact" class="type-panel hidden space-y-3">
+            <div class="bg-purple-50/60 border border-purple-100 p-3.5 rounded-2xl space-y-2.5">
+              <p class="text-xs font-bold text-purple-900">Tarjeta de Contacto Pastoral (vCard)</p>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <div>
+                  <label for="contact-name" class="block text-[11px] font-bold text-slate-700 mb-0.5">Nombre y Apellidos</label>
+                  <input type="text" id="contact-name" placeholder="Pastor Juan Pérez" class="w-full text-xs px-3 py-2 rounded-lg border border-purple-200 bg-white focus:ring-2 focus:ring-purple-300 outline-none">
+                </div>
+                <div>
+                  <label for="contact-role" class="block text-[11px] font-bold text-slate-700 mb-0.5">Ministerio o Cargo</label>
+                  <input type="text" id="contact-role" placeholder="Pastor Principal / Jóvenes" class="w-full text-xs px-3 py-2 rounded-lg border border-purple-200 bg-white focus:ring-2 focus:ring-purple-300 outline-none">
+                </div>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <div>
+                  <label for="contact-phone" class="block text-[11px] font-bold text-slate-700 mb-0.5">Teléfono / WhatsApp</label>
+                  <input type="tel" id="contact-phone" placeholder="+51 987 654 321" class="w-full text-xs px-3 py-2 rounded-lg border border-purple-200 bg-white focus:ring-2 focus:ring-purple-300 outline-none">
+                </div>
+                <div>
+                  <label for="contact-email" class="block text-[11px] font-bold text-slate-700 mb-0.5">Correo Electrónico</label>
+                  <input type="email" id="contact-email" placeholder="pastoral@tuiglesia.org" class="w-full text-xs px-3 py-2 rounded-lg border border-purple-200 bg-white focus:ring-2 focus:ring-purple-300 outline-none">
+                </div>
+              </div>
+              <p class="text-[11px] text-slate-500">
+                Al escanearlo, el celular ofrecerá la opción de "Guardar contacto" directamente en la agenda telefónica.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- PASO 3: COLORES SUAVES / PASTEL -->
+        <div>
+          <div class="flex items-center gap-2 mb-3">
+            <span class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 font-bold text-xs flex items-center justify-center">3</span>
+            <label class="font-title font-bold text-base text-slate-800">Elige la combinación de color</label>
+          </div>
+
+          <div class="flex flex-wrap gap-2.5 items-center">
+            <!-- Paletas predeterminadas amigables con alto contraste para escaneo infalible -->
+            <button type="button" onclick="setQRColor('#0f172a', '#ffffff', this)" class="color-picker-btn active flex items-center gap-2 px-3 py-1.5 rounded-full border-2 border-indigo-500 bg-slate-50 text-xs font-semibold text-slate-700">
+              <span class="w-4 h-4 rounded-full bg-slate-900 border border-slate-300"></span>
+              <span>Negro clásico</span>
+            </button>
+            <button type="button" onclick="setQRColor('#1e3a8a', '#ffffff', this)" class="color-picker-btn flex items-center gap-2 px-3 py-1.5 rounded-full border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:border-slate-300">
+              <span class="w-4 h-4 rounded-full bg-blue-900 border border-slate-300"></span>
+              <span>Azul Marino</span>
+            </button>
+            <button type="button" onclick="setQRColor('#064e3b', '#ffffff', this)" class="color-picker-btn flex items-center gap-2 px-3 py-1.5 rounded-full border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:border-slate-300">
+              <span class="w-4 h-4 rounded-full bg-emerald-900 border border-slate-300"></span>
+              <span>Verde Olivo</span>
+            </button>
+            <button type="button" onclick="setQRColor('#4c1d95', '#ffffff', this)" class="color-picker-btn flex items-center gap-2 px-3 py-1.5 rounded-full border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:border-slate-300">
+              <span class="w-4 h-4 rounded-full bg-purple-900 border border-slate-300"></span>
+              <span>Púrpura Noble</span>
+            </button>
+            <button type="button" onclick="setQRColor('#7c2d12', '#fffbeb', this)" class="color-picker-btn flex items-center gap-2 px-3 py-1.5 rounded-full border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:border-slate-300">
+              <span class="w-4 h-4 rounded-full bg-amber-950 border border-amber-200"></span>
+              <span>Cálido / Crema</span>
+            </button>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-2">
+            Nota: Siempre garantizamos un contraste alto para que cualquier cámara celular pueda leer el código sin fallar.
+          </p>
+        </div>
+
+        <!-- BOTÓN DE ACCIÓN: GENERAR QR -->
+        <div class="pt-2">
+          <button type="button" onclick="generateAndSaveQR()" class="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-indigo-500 via-sky-500 to-emerald-500 text-white font-title font-bold text-base shadow-md shadow-indigo-100 hover:opacity-95 active:scale-[0.99] transition-all flex items-center justify-center gap-2">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+            <span>Generar y Actualizar Código QR</span>
+          </button>
+        </div>
+
+      </section>
+
+      <!-- COLUMNA DERECHA: VISTA PREVIA Y DESCARGA (5 Columnas) -->
+      <section class="lg:col-span-5 flex flex-col gap-6">
+
+        <!-- TARJETA DEL CÓDIGO QR GENERADO -->
+        <div class="bg-white rounded-3xl p-6 shadow-xs border border-slate-100 text-center flex flex-col items-center">
+          
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold mb-4 border border-emerald-100">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span id="qr-badge-type">Enlace Web</span>
+          </div>
+
+          <h3 id="preview-title" class="font-title font-bold text-lg text-slate-800 mb-1">
+            Transmisión Culto Dominical
+          </h3>
+          <p id="preview-subtitle" class="text-xs text-slate-500 max-w-xs mb-5 truncate">
+            https://www.youtube.com/@iglesiacomunidad
+          </p>
+
+          <!-- CONTENEDOR DEL CANVAS IMPRIMIBLE -->
+          <div id="print-area" class="p-4 bg-amber-50/30 rounded-2xl border border-amber-100/60 mb-5 relative">
+            <div id="qrcode-container" class="flex items-center justify-center min-w-[220px] min-h-[220px]">
+              <!-- El canvas o imagen del QR se insertará aquí dinámicamente -->
+            </div>
+            <p class="text-[10px] text-slate-400 mt-2 font-medium">Apunta con la cámara de tu celular para probar</p>
+          </div>
+
+          <!-- BOTONES DE DESCARGA Y ACCIÓN -->
+          <div class="w-full space-y-2.5">
+            <div class="grid grid-cols-2 gap-2">
+              <!-- Descargar PNG -->
+              <button type="button" onclick="downloadQRCode('png')" class="py-2.5 px-3 rounded-xl bg-indigo-50 hover:bg-indigo-100/80 text-indigo-700 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors border border-indigo-200/60">
+                <i class="fa-solid fa-file-image"></i>
+                <span>Descargar PNG</span>
+              </button>
+              <!-- Descargar JPG -->
+              <button type="button" onclick="downloadQRCode('jpg')" class="py-2.5 px-3 rounded-xl bg-emerald-50 hover:bg-emerald-100/80 text-emerald-800 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors border border-emerald-200/60">
+                <i class="fa-solid fa-file-arrow-down"></i>
+                <span>Descargar JPG</span>
+              </button>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+              <!-- Imprimir directo -->
+              <button type="button" onclick="window.print()" class="py-2.5 px-3 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors border border-slate-200">
+                <i class="fa-solid fa-print"></i>
+                <span>Imprimir QR</span>
+              </button>
+              <!-- Copiar contenido -->
+              <button type="button" onclick="copyQRContent()" class="py-2.5 px-3 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors border border-slate-200">
+                <i class="fa-regular fa-copy"></i>
+                <span>Copiar Datos</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Aclaración de validez eterna -->
+          <div class="mt-4 pt-4 border-t border-slate-100 w-full text-center">
+            <p class="text-[11px] text-slate-400">
+              <i class="fa-solid fa-infinity text-indigo-400 mr-1"></i> Este código es 100% estático. Puede imprimirse en volantes o proyectarse en pantalla y funcionará indefinidamente.
+            </p>
+          </div>
+
+        </div>
+
+        <!-- ============================================================= -->
+        <!-- ESPACIO PUBLICITARIO 2: RECTÁNGULO MEDIO (300x250) MONETIZACIÓN -->
+        <!-- ============================================================= -->
+        <!-- 
+          INSTRUCCIÓN PARA MONETIZAR:
+          Reemplaza el interior por tu bloque de Google AdSense de tamaño 300x250
+        -->
+        <div aria-label="Espacio Publicitario Lateral" class="w-full flex flex-col items-center">
+          <span class="text-[10px] tracking-wider uppercase font-bold text-slate-400 mb-1">Publicidad</span>
+          <div class="ad-slot-container w-full max-w-[320px] min-h-[250px] rounded-3xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center p-4 text-center transition-all hover:border-slate-300">
+            <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-400 flex items-center justify-center text-xl mb-2">
+              <i class="fa-solid fa-ad"></i>
+            </div>
+            <p class="text-xs font-bold text-slate-600">Espacio de Anuncio (300x250)</p>
+            <p class="text-[11px] text-slate-400 mt-1 max-w-[220px]">
+              Aquí se mostrará publicidad autorizada una vez dada de alta tu cuenta de Google AdSense.
+            </p>
+            <!-- Inserción del script AdSense cuando esté activo -->
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- SECCIÓN: HISTORIAL EN LOCALSTORAGE (MÁXIMO 10 ELEMENTOS - POLÍTICA FIFO)  -->
+    <!-- ========================================================================= -->
+    <section id="historial-section" class="bg-white rounded-3xl p-6 sm:p-7 shadow-xs border border-slate-100 space-y-4">
+      
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+        <div>
+          <div class="flex items-center gap-2">
+            <h3 class="font-title font-bold text-lg text-slate-800">Tus Últimos Códigos Generados</h3>
+            <span id="history-counter" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-800">
+              0 / 10
+            </span>
+          </div>
+          <p class="text-xs text-slate-500 mt-0.5">
+            Guardados de forma privada en este navegador (sin necesidad de cuentas). Máximo 10 elementos.
+          </p>
+        </div>
+
+        <button type="button" onclick="clearAllHistory()" class="text-xs font-bold text-rose-600 hover:text-rose-700 hover:bg-rose-50 px-3 py-1.5 rounded-xl border border-rose-200 transition-colors">
+          <i class="fa-regular fa-trash-can mr-1"></i> Borrar Todo el Historial
+        </button>
+      </div>
+
+      <!-- Nota explicativa sobre el límite del LocalStorage -->
+      <div class="bg-amber-50/70 border border-amber-200/60 rounded-2xl p-3.5 flex items-start gap-3">
+        <i class="fa-solid fa-circle-info text-amber-600 mt-0.5 text-sm"></i>
+        <div class="text-xs text-amber-900 leading-relaxed">
+          <span class="font-bold">¿Cómo funciona la memoria de 10 códigos?</span> Los navegadores web tienen un límite seguro de memoria (aproximadamente 5 MB de <em>LocalStorage</em>). Para que tu navegador nunca se vuelva lento ni se sature, este generador almacena tus <strong>10 códigos más recientes</strong>. Al crear el código número 11, el más antiguo se retirará suavemente de la lista de forma automática.
+        </div>
+      </div>
+
+      <!-- Grid de Códigos Históricos -->
+      <div id="history-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5 pt-2">
+        <!-- Renderizado dinámicamente con JavaScript -->
+      </div>
+
+      <!-- Estado vacío -->
+      <div id="history-empty-state" class="py-8 text-center text-slate-400 space-y-2 hidden">
+        <i class="fa-solid fa-box-archive text-3xl text-slate-300"></i>
+        <p class="text-xs font-semibold">Aún no has generado ningún código QR en esta sesión.</p>
+        <p class="text-[11px] text-slate-400">Genera uno arriba y quedará guardado aquí para descargarlo cuando quieras.</p>
+      </div>
+
+    </section>
+
+    <!-- GUÍA RÁPIDA DE USO PARA MIEMBROS DE LA IGLESIA -->
+    <section class="bg-slate-50 border border-slate-200/70 rounded-3xl p-6 sm:p-7">
+      <h3 class="font-title font-bold text-base text-slate-800 mb-3 flex items-center gap-2">
+        <i class="fa-solid fa-lightbulb text-amber-500"></i>
+        <span>Ideas prácticas para tu congregación o ministerio</span>
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-600 leading-relaxed">
+        <div class="bg-white p-4 rounded-2xl border border-slate-200/60 space-y-1">
+          <p class="font-bold text-slate-800"><i class="fa-solid fa-wifi text-sky-500 mr-1.5"></i> Cartel de Wi-Fi en el Atrio</p>
+          <p>Imprime el QR de Wi-Fi y colócalo en la recepción o paredes del templo. Los hermanos y visitantes solo deben apuntar la cámara para conectarse.</p>
+        </div>
+        <div class="bg-white p-4 rounded-2xl border border-slate-200/60 space-y-1">
+          <p class="font-bold text-slate-800"><i class="fa-regular fa-newspaper text-emerald-500 mr-1.5"></i> Boletín y Escuela Dominical</p>
+          <p>Sube las lecciones o devocionales a Google Drive o tu web y crea el QR tipo "Folleto o Imagen" para que puedan leerlo en sus teléfonos sin gastar en impresiones de papel.</p>
+        </div>
+        <div class="bg-white p-4 rounded-2xl border border-slate-200/60 space-y-1">
+          <p class="font-bold text-slate-800"><i class="fa-solid fa-heart text-rose-500 mr-1.5"></i> Peticiones y Contacto Pastoral</p>
+          <p>Crea un QR que dirija al número de WhatsApp del ministerio de consejería o a un formulario de oración para brindar apoyo espiritual oportuno.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================== -->
+  <!-- PIE DE PÁGINA (FOOTER)                     -->
+  <!-- ========================================== -->
+  <footer class="bg-white border-t border-slate-200/60 py-6 mt-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+      <div class="flex items-center gap-2">
+        <i class="fa-solid fa-dove text-indigo-400"></i>
+        <span>Herramienta comunitaria libre y gratuita para templos, ministerios y comunidades.</span>
+      </div>
+      <div>
+        <span>Desarrollado con dedicación para bendecir a tu congregación.</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- CONTENEDOR FLOTANTE PARA MENSAJES TOAST (Sin usar alert()) -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-sm pointer-events-none"></div>
+
+  <!-- ========================================================================= -->
+  <!-- LÓGICA JAVASCRIPT: GENERACIÓN, LOCALSTORAGE FIFO Y DESCARGA               -->
+  <!-- ========================================================================= -->
+  <script>
+    // Variables globales de estado
+    let currentType = 'link';
+    let qrColorDark = '#0f172a';
+    let qrColorLight = '#ffffff';
+    let qrInstance = null;
+    let currentQRDataPayload = '';
+    const STORAGE_KEY = 'iglesia_qr_history_v1';
+    const MAX_HISTORY = 10;
+
+    // Inicializar cuando cargue la página
+    window.addEventListener('DOMContentLoaded', () => {
+      loadHistory();
+      generateAndSaveQR(false); // genera el inicial sin mostrar toast de alerta
+    });
+
+    /**
+     * Cambia la pestaña activa del tipo de QR
+     */
+    function setQRType(type) {
+      currentType = type;
+
+      // Actualizar botones de pestaña
+      document.querySelectorAll('.type-tab-btn').forEach(btn => {
+        const isTarget = btn.getAttribute('data-type') === type;
+        const indicator = btn.querySelector('.indicator');
+
+        if (isTarget) {
+          btn.className = 'type-tab-btn active p-3 rounded-2xl border text-left transition-all flex flex-col justify-between bg-indigo-50/80 border-indigo-300 text-indigo-900 shadow-xs';
+          if (indicator) indicator.className = 'w-2 h-2 rounded-full bg-indigo-500 indicator';
+        } else {
+          btn.className = 'type-tab-btn p-3 rounded-2xl border text-left transition-all flex flex-col justify-between bg-white border-slate-200 text-slate-700 hover:border-slate-300';
+          if (indicator) indicator.className = 'w-2 h-2 rounded-full bg-transparent indicator';
+        }
+      });
+
+      // Mostrar/ocultar paneles
+      document.querySelectorAll('.type-panel').forEach(panel => panel.classList.add('hidden'));
+      const activePanel = document.getElementById(`panel-${type}`);
+      if (activePanel) activePanel.classList.remove('hidden');
+
+      // Sugerencia de nombre por defecto si está vacío
+      const labelInput = document.getElementById('qr-label-input');
+      const defaultLabels = {
+        link: 'Enlace Culto en Vivo',
+        image: 'Folleto de Actividad / Anuncio',
+        wifi: 'Wi-Fi del Templo',
+        text: 'Versículo o Reflexión',
+        contact: 'Contacto Pastoral'
+      };
+      if (!labelInput.value.trim() || Object.values(defaultLabels).includes(labelInput.value)) {
+        labelInput.value = defaultLabels[type] || 'Mi Código QR';
+      }
+
+      // Regenerar vista previa
+      generateAndSaveQR(false);
+    }
+
+    /**
+     * Ajusta los colores del QR
+     */
+    function setQRColor(dark, light, btnElement) {
+      qrColorDark = dark;
+      qrColorLight = light;
+
+      document.querySelectorAll('.color-picker-btn').forEach(btn => {
+        btn.classList.remove('border-2', 'border-indigo-500', 'bg-slate-50');
+        btn.classList.add('border-slate-200', 'bg-white');
+      });
+
+      btnElement.classList.remove('border-slate-200', 'bg-white');
+      btnElement.classList.add('border-2', 'border-indigo-500', 'bg-slate-50');
+
+      generateAndSaveQR(false);
+    }
+
+    /**
+     * Extrae el contenido correspondiente según el tipo seleccionado
+     */
+    function extractQRContent() {
+      let content = '';
+      let displayTitle = document.getElementById('qr-label-input').value.trim() || 'Código Comunitario';
+      let typeLabel = 'Enlace Web';
+
+      if (currentType === 'link') {
+        typeLabel = 'Enlace Web';
+        const val = document.getElementById('link-url').value.trim();
+        content = val || 'https://www.youtube.com';
+      } 
+      else if (currentType === 'image') {
+        typeLabel = 'Folleto Digital';
+        const val = document.getElementById('image-url').value.trim();
+        content = val || 'https://drive.google.com';
+      } 
+      else if (currentType === 'wifi') {
+        typeLabel = 'Acceso Wi-Fi';
+        const ssid = document.getElementById('wifi-ssid').value.trim() || 'Templo_Wi-Fi';
+        const pass = document.getElementById('wifi-pass').value.trim();
+        const type = document.getElementById('wifi-type').value;
+        // Formato estándar Wi-Fi: WIFI:T:WPA;S:mired;P:miclave;;
+        if (type === 'nopass' || !pass) {
+          content = `WIFI:T:nopass;S:${ssid};;`;
+        } else {
+          content = `WIFI:T:${type};S:${ssid};P:${pass};;`;
+        }
+      } 
+      else if (currentType === 'text') {
+        typeLabel = 'Versículo / Mensaje';
+        const val = document.getElementById('text-content').value.trim();
+        content = val || '«El Señor es mi pastor, nada me faltará» - Salmos 23:1';
+      } 
+      else if (currentType === 'contact') {
+        typeLabel = 'Contacto Pastoral';
+        const name = document.getElementById('contact-name').value.trim() || 'Pastor de la Comunidad';
+        const role = document.getElementById('contact-role').value.trim() || 'Ministerio Pastoral';
+        const phone = document.getElementById('contact-phone').value.trim() || '+000000000';
+        const email = document.getElementById('contact-email').value.trim() || '';
+        // Formato vCard 3.0 estándar
+        content = `BEGIN:VCARD\nVERSION:3.0\nFN:${name}\nORG:${role}\nTEL;TYPE=CELL:${phone}\nEMAIL:${email}\nNOTE:Contacto de la Iglesia\nEND:VCARD`;
+      }
+
+      return { content, displayTitle, typeLabel };
+    }
+
+    /**
+     * Construye el código QR usando EasyQRCodeJS en alta definición
+     */
+    function renderQR(content, darkColor, lightColor) {
+      const container = document.getElementById('qrcode-container');
+      container.innerHTML = ''; // Limpiar previo
+
+      currentQRDataPayload = content;
+
+      // Configuración de EasyQRCodeJS
+      const options = {
+        text: content,
+        width: 240,
+        height: 240,
+        colorDark: darkColor,
+        colorLight: lightColor,
+        correctLevel: QRCode.CorrectLevel.H, // Máxima tolerancia a errores
+        quietZone: 12,
+        quietZoneColor: lightColor,
+        onRenderingEnd: function() {
+          // Asegurar que el canvas generado sea accesible
+        }
+      };
+
+      try {
+        qrInstance = new QRCode(container, options);
+      } catch (e) {
+        console.error('Error generando QR:', e);
+      }
+    }
+
+    /**
+     * Genera el QR actual y lo guarda en el LocalStorage respetando el límite de 10
+     */
+    function generateAndSaveQR(showNotification = true) {
+      const { content, displayTitle, typeLabel } = extractQRContent();
+
+      // Actualizar vista previa
+      document.getElementById('preview-title').textContent = displayTitle;
+      document.getElementById('preview-subtitle').textContent = content;
+      document.getElementById('qr-badge-type').textContent = typeLabel;
+
+      // Renderizar el QR visual
+      renderQR(content, qrColorDark, qrColorLight);
+
+      // Esperar brevemente para guardar en LocalStorage con miniatura
+      setTimeout(() => {
+        saveToLocalStorage({
+          id: Date.now().toString(),
+          title: displayTitle,
+          type: currentType,
+          typeLabel: typeLabel,
+          content: content,
+          colorDark: qrColorDark,
+          colorLight: qrColorLight,
+          date: new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' })
+        }, showNotification);
+      }, 250);
+    }
+
+    /**
+     * Guarda el elemento en LocalStorage con política FIFO de 10 elementos
+     */
+    function saveToLocalStorage(item, notify = true) {
+      let history = getHistoryFromStorage();
+
+      // Evitar guardar duplicado exacto consecutivo
+      if (history.length > 0 && history[0].content === item.content && history[0].title === item.title) {
+        if (notify) {
+          showToast('Código actualizado en pantalla.', 'info');
+        }
+        return;
+      }
+
+      // Regla de límite de 10 elementos (FIFO)
+      let removedOldest = false;
+      let oldestTitle = '';
+      if (history.length >= MAX_HISTORY) {
+        const removed = history.pop(); // Elimina el más antiguo del final
+        removedOldest = true;
+        oldestTitle = removed.title;
+      }
+
+      // Agregar el nuevo al inicio
+      history.unshift(item);
+
+      // Guardar en el almacenamiento del navegador
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+      } catch (err) {
+        console.warn('LocalStorage saturado, limpiando historial antiguo...');
+        // Si por alguna razón el almacenamiento se colma, dejamos solo 5
+        history = history.slice(0, 5);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+      }
+
+      // Renderizar la lista
+      renderHistoryUI();
+
+      // Notificaciones amigables al usuario
+      if (notify) {
+        if (removedOldest) {
+          showToast(`¡Código creado! Se liberó el espacio de "${oldestTitle}" por el límite de 10.`, 'warning');
+        } else {
+          showToast('¡Código QR generado y guardado en tu historial!', 'success');
+        }
+      }
+    }
+
+    /**
+     * Obtiene el listado desde LocalStorage
+     */
+    function getHistoryFromStorage() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    /**
+     * Renderiza el historial en pantalla
+     */
+    function renderHistoryUI() {
+      const history = getHistoryFromStorage();
+      const grid = document.getElementById('history-grid');
+      const counter = document.getElementById('history-counter');
+      const emptyState = document.getElementById('history-empty-state');
+
+      counter.textContent = `${history.length} / ${MAX_HISTORY}`;
+
+      if (history.length === 0) {
+        grid.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      grid.innerHTML = '';
+
+      history.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = 'bg-slate-50/80 rounded-2xl p-3 border border-slate-200/80 flex flex-col justify-between hover:bg-white hover:shadow-xs transition-all text-xs';
+        
+        // Formatear icono según tipo
+        let typeIcon = 'fa-globe';
+        let badgeColor = 'bg-indigo-100 text-indigo-700';
+        if (item.type === 'image') { typeIcon = 'fa-image'; badgeColor = 'bg-emerald-100 text-emerald-800'; }
+        if (item.type === 'wifi') { typeIcon = 'fa-wifi'; badgeColor = 'bg-sky-100 text-sky-800'; }
+        if (item.type === 'text') { typeIcon = 'fa-book-bible'; badgeColor = 'bg-amber-100 text-amber-800'; }
+        if (item.type === 'contact') { typeIcon = 'fa-address-card'; badgeColor = 'bg-purple-100 text-purple-800'; }
+
+        card.innerHTML = `
+          <div>
+            <div class="flex items-center justify-between gap-1 mb-1.5">
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-md ${badgeColor} truncate">
+                <i class="fa-solid ${typeIcon} mr-1"></i>${item.typeLabel}
+              </span>
+              <span class="text-[10px] text-slate-400 font-semibold">${item.date || ''}</span>
+            </div>
+            <h4 class="font-bold text-slate-800 line-clamp-1 mb-1" title="${item.title}">${item.title}</h4>
+            <p class="text-[11px] text-slate-500 line-clamp-2 break-all bg-white p-1.5 rounded-lg border border-slate-100 mb-3 font-mono">
+              ${item.content}
+            </p>
+          </div>
+
+          <div class="flex items-center justify-between gap-1 pt-2 border-t border-slate-200/60">
+            <button onclick="restoreHistoryItem('${item.id}')" class="text-indigo-600 hover:text-indigo-800 font-bold text-[11px] flex items-center gap-1 hover:underline">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i> Cargar
+            </button>
+            <button onclick="deleteHistoryItem('${item.id}')" class="text-rose-500 hover:text-rose-700 p-1 rounded-md hover:bg-rose-50 transition-colors" title="Eliminar este código">
+              <i class="fa-regular fa-trash-can"></i>
+            </button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    /**
+     * Carga un elemento guardado del historial de vuelta al editor
+     */
+    function restoreHistoryItem(id) {
+      const history = getHistoryFromStorage();
+      const item = history.find(x => x.id === id);
+      if (!item) return;
+
+      // Cambiar tipo
+      setQRType(item.type);
+      document.getElementById('qr-label-input').value = item.title;
+
+      // Llenar campos según tipo
+      if (item.type === 'link') {
+        document.getElementById('link-url').value = item.content;
+      } else if (item.type === 'image') {
+        document.getElementById('image-url').value = item.content;
+      } else if (item.type === 'text') {
+        document.getElementById('text-content').value = item.content;
+      }
+
+      qrColorDark = item.colorDark || '#0f172a';
+      qrColorLight = item.colorLight || '#ffffff';
+
+      renderQR(item.content, qrColorDark, qrColorLight);
+      document.getElementById('preview-title').textContent = item.title;
+      document.getElementById('preview-subtitle').textContent = item.content;
+      document.getElementById('qr-badge-type').textContent = item.typeLabel;
+
+      showToast(`Código "${item.title}" cargado al visor`, 'info');
+      window.scrollTo({ top: 180, behavior: 'smooth' });
+    }
+
+    /**
+     * Elimina un único elemento del historial
+     */
+    function deleteHistoryItem(id) {
+      let history = getHistoryFromStorage();
+      history = history.filter(item => item.id !== id);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+      renderHistoryUI();
+      showToast('Código retirado del historial.', 'info');
+    }
+
+    /**
+     * Limpia la totalidad del historial con confirmación en toast/modal amigable
+     */
+    function clearAllHistory() {
+      const history = getHistoryFromStorage();
+      if (history.length === 0) {
+        showToast('El historial ya está vacío.', 'info');
+        return;
+      }
+      localStorage.removeItem(STORAGE_KEY);
+      renderHistoryUI();
+      showToast('Historial vaciado correctamente.', 'success');
+    }
+
+    /**
+     * Carga el historial al iniciar
+     */
+    function loadHistory() {
+      renderHistoryUI();
+    }
+
+    /**
+     * Descarga del código en PNG o JPG en alta calidad
+     */
+    function downloadQRCode(format = 'png') {
+      const container = document.getElementById('qrcode-container');
+      const canvas = container.querySelector('canvas');
+      const img = container.querySelector('img');
+
+      const title = document.getElementById('qr-label-input').value.trim() || 'codigo-qr-iglesia';
+      const cleanFileName = title.toLowerCase().replace(/[^a-z0-9]/gi, '_') + '.' + format;
+
+      if (canvas) {
+        if (format === 'jpg' || format === 'jpeg') {
+          // Crear un canvas temporal para asegurar fondo blanco en JPG
+          const tempCanvas = document.createElement('canvas');
+          tempCanvas.width = canvas.width;
+          tempCanvas.height = canvas.height;
+          const ctx = tempCanvas.getContext('2d');
+          ctx.fillStyle = qrColorLight || '#FFFFFF';
+          ctx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+          ctx.drawImage(canvas, 0, 0);
+
+          const dataUrl = tempCanvas.toDataURL('image/jpeg', 0.95);
+          triggerDownload(dataUrl, cleanFileName);
+        } else {
+          const dataUrl = canvas.toDataURL('image/png');
+          triggerDownload(dataUrl, cleanFileName);
+        }
+        showToast(`Descargando ${cleanFileName} en alta resolución...`, 'success');
+      } else if (img && img.src) {
+        triggerDownload(img.src, cleanFileName);
+        showToast(`Descargando ${cleanFileName}...`, 'success');
+      } else {
+        showToast('No se encontró la imagen del QR para descargar', 'warning');
+      }
+    }
+
+    function triggerDownload(url, filename) {
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    /**
+     * Copia el contenido del QR al portapapeles
+     */
+    function copyQRContent() {
+      if (!currentQRDataPayload) {
+        showToast('No hay datos para copiar', 'warning');
+        return;
+      }
+
+      // Método seguro de copia sin restricciones de iframe
+      const tempInput = document.createElement('textarea');
+      tempInput.value = currentQRDataPayload;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      try {
+        document.execCommand('copy');
+        showToast('¡Texto/Enlace copiado al portapapeles!', 'success');
+      } catch (err) {
+        showToast('No se pudo copiar automáticamente', 'warning');
+      }
+      document.body.removeChild(tempInput);
+    }
+
+    /**
+     * Sistema de Notificaciones Toast amigables (Reemplazo moderno de alert())
+     */
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+
+      let icon = 'fa-circle-check';
+      let colors = 'bg-slate-900 text-white';
+
+      if (type === 'success') {
+        icon = 'fa-circle-check';
+        colors = 'bg-emerald-800 text-white border border-emerald-700';
+      } else if (type === 'warning') {
+        icon = 'fa-triangle-exclamation';
+        colors = 'bg-amber-800 text-white border border-amber-700';
+      } else if (type === 'info') {
+        icon = 'fa-circle-info';
+        colors = 'bg-indigo-900 text-white border border-indigo-800';
+      }
+
+      toast.className = `${colors} pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-2xl shadow-lg text-xs font-semibold transform transition-all duration-300 translate-y-3 opacity-0`;
+      toast.innerHTML = `
+        <i class="fa-solid ${icon} text-sm"></i>
+        <span class="flex-1">${message}</span>
+      `;
+
+      container.appendChild(toast);
+
+      // Animación de entrada
+      requestAnimationFrame(() => {
+        toast.classList.remove('translate-y-3', 'opacity-0');
+      });
+
+      // Retiro automático
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => {
+          if (toast.parentElement) toast.remove();
+        }, 300);
+      }, 3500);
+    }
+  </script>
+</body>
+</html>
